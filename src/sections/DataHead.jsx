@@ -57,6 +57,10 @@ export default function DataHead() {
                   Head of Data Science
                 </p>
 
+                <p className="text-gray-400 mt-2">
+                  Joined January 2025
+                </p>
+
 
                 <div className="grid grid-cols-2 gap-6 mt-8 w-full">
 
