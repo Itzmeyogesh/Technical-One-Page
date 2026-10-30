@@ -1,18 +1,44 @@
+import { useState } from "react";
 import {
   User,
   Mail,
   Phone,
   GraduationCap,
   Send,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
 
 export default function ContactForm() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
-    alert(
-      "Application submitted successfully! We will contact you soon."
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    const form = e.target;
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch("https://formspree.io/f/maqgywlj", {
+        method: "POST",
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      setStatus("error");
+    }
   };
 
   return (
@@ -31,21 +57,19 @@ export default function ContactForm() {
         </h3>
 
         <p className="text-gray-400">
-          Fill out the form below and our team will
-          get in touch with you.
+          Fill out the form below and our team will get in touch with you.
         </p>
       </div>
 
       {/* Name */}
-
       <div className="relative">
         <User
           size={18}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
         />
-
         <input
           type="text"
+          name="name"
           placeholder="Full Name"
           required
           className="
@@ -57,20 +81,23 @@ export default function ContactForm() {
           py-4
           pl-12
           pr-4
+          text-white
+          outline-none
+          focus:border-cyan-500
+          transition
           "
         />
       </div>
 
       {/* Email */}
-
       <div className="relative">
         <Mail
           size={18}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
         />
-
         <input
           type="email"
+          name="email"
           placeholder="Email Address"
           required
           className="
@@ -82,20 +109,23 @@ export default function ContactForm() {
           py-4
           pl-12
           pr-4
+          text-white
+          outline-none
+          focus:border-cyan-500
+          transition
           "
         />
       </div>
 
       {/* Phone */}
-
       <div className="relative">
         <Phone
           size={18}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
         />
-
         <input
           type="tel"
+          name="phone"
           placeholder="Mobile Number"
           required
           className="
@@ -107,20 +137,23 @@ export default function ContactForm() {
           py-4
           pl-12
           pr-4
+          text-white
+          outline-none
+          focus:border-cyan-500
+          transition
           "
         />
       </div>
 
       {/* College */}
-
       <div className="relative">
         <GraduationCap
           size={18}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
         />
-
         <input
           type="text"
+          name="college"
           placeholder="College / University"
           required
           className="
@@ -132,71 +165,115 @@ export default function ContactForm() {
           py-4
           pl-12
           pr-4
+          text-white
+          outline-none
+          focus:border-cyan-500
+          transition
           "
         />
       </div>
 
       {/* Domain */}
-
-      <select
-        required
-        className="
-        w-full
-        bg-white/5
-        border
-        border-white/10
-        rounded-2xl
-        py-4
-        px-4
-        "
-      >
-        <option value="">
-          Select Internship Domain
-        </option>
-
-        <option>Web Development</option>
-        <option>Java Development</option>
-        <option>AI / Machine Learning</option>
-        <option>Power BI</option>
-        <option>Cloud & DevOps</option>
-        <option>Year 2038 Research</option>
-        <option>Leap Second Research</option>
-      </select>
+      <div>
+        <select
+          name="domain"
+          required
+          className="
+          w-full
+          bg-[#0f172a]
+          border
+          border-white/10
+          rounded-2xl
+          py-4
+          px-4
+          text-white
+          outline-none
+          focus:border-cyan-500
+          transition
+          "
+        >
+          <option value="" className="bg-slate-900 text-gray-400">
+            Select Internship Domain
+          </option>
+          <option value="Web Development" className="bg-slate-900 text-white">Web Development</option>
+          <option value="Java Development" className="bg-slate-900 text-white">Java Development</option>
+          <option value="AI / Machine Learning" className="bg-slate-900 text-white">AI / Machine Learning</option>
+          <option value="Power BI" className="bg-slate-900 text-white">Power BI</option>
+          <option value="Cloud & DevOps" className="bg-slate-900 text-white">Cloud & DevOps</option>
+          <option value="Year 2038 Research" className="bg-slate-900 text-white">Year 2038 Research</option>
+          <option value="Leap Second Research" className="bg-slate-900 text-white">Leap Second Research</option>
+        </select>
+      </div>
 
       {/* Message */}
-
-      <textarea
-        rows="5"
-        placeholder="Tell us about yourself..."
-        className="
-        w-full
-        bg-white/5
-        border
-        border-white/10
-        rounded-2xl
-        p-4
-        resize-none
-        "
-      />
-
-      {/* Resume */}
-
       <div>
-        <label className="block text-sm text-gray-400 mb-2">
-          Upload Resume
-        </label>
-
-        <input
-          type="file"
-          className="w-full"
+        <textarea
+          name="message"
+          rows="4"
+          placeholder="Tell us about yourself..."
+          className="
+          w-full
+          bg-white/5
+          border
+          border-white/10
+          rounded-2xl
+          p-4
+          resize-none
+          text-white
+          outline-none
+          focus:border-cyan-500
+          transition
+          "
         />
       </div>
-      <form action="https://formspree.io/f/maqgywlj" method="POST"></form>
+
+      {/* Resume */}
+      <div>
+        <label className="block text-sm text-gray-400 mb-2">
+          Upload Resume (PDF, DOCX)
+        </label>
+        <input
+          type="file"
+          name="resume"
+          accept=".pdf,.doc,.docx"
+          className="
+          w-full
+          text-sm
+          text-gray-400
+          file:mr-4
+          file:py-2.5
+          file:px-4
+          file:rounded-xl
+          file:border-0
+          file:text-sm
+          file:font-semibold
+          file:bg-cyan-500/10
+          file:text-cyan-400
+          hover:file:bg-cyan-500/20
+          file:cursor-pointer
+          "
+        />
+      </div>
+
+      {/* Status Messages */}
+      {status === "success" && (
+        <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl text-sm">
+          <CheckCircle2 size={18} />
+          <span>Application submitted successfully! We will get in touch soon.</span>
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="flex items-center gap-2 text-rose-400 bg-rose-500/10 border border-rose-500/20 p-4 rounded-xl text-sm">
+          <AlertCircle size={18} />
+          <span>Something went wrong. Please check your details and try again.</span>
+        </div>
+      )}
 
       {/* Button */}
-
       <button
         type="submit"
+        disabled={status === "loading"}
         className="
         w-full
         py-4
@@ -212,14 +289,25 @@ export default function ContactForm() {
         via-blue-500
         to-purple-600
         hover:scale-[1.02]
+        active:scale-[0.98]
+        disabled:opacity-50
+        disabled:hover:scale-100
         transition-all
         duration-300
         shadow-[0_0_30px_rgba(34,211,238,0.3)]
         "
       >
-        Submit Application
-
-        <Send size={20} />
+        {status === "loading" ? (
+          <>
+            Submitting...
+            <Loader2 size={20} className="animate-spin" />
+          </>
+        ) : (
+          <>
+            Submit Application
+            <Send size={20} />
+          </>
+        )}
       </button>
     </form>
   );
