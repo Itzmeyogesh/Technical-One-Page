@@ -4,6 +4,7 @@ import {
   Mail,
   Phone,
   GraduationCap,
+  Link,
   Send,
   Loader2,
   CheckCircle2,
@@ -205,6 +206,39 @@ export default function ContactForm() {
         </select>
       </div>
 
+      {/* Resume Drive Link */}
+      <div className="space-y-1">
+        <div className="relative">
+          <Link
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+          <input
+            type="url"
+            name="resume_link"
+            placeholder="Resume Link (Google Drive / Portfolio / LinkedIn)"
+            required
+            className="
+            w-full
+            bg-white/5
+            border
+            border-white/10
+            rounded-2xl
+            py-4
+            pl-12
+            pr-4
+            text-white
+            outline-none
+            focus:border-cyan-500
+            transition
+            "
+          />
+        </div>
+        <p className="text-xs text-gray-400 pl-2">
+          * Drive लिंकची ॲक्सेस 'Anyone with the link can view' असल्याची खात्री करा.
+        </p>
+      </div>
+
       {/* Message */}
       <div>
         <textarea
@@ -223,34 +257,6 @@ export default function ContactForm() {
           outline-none
           focus:border-cyan-500
           transition
-          "
-        />
-      </div>
-
-      {/* Resume */}
-      <div>
-        <label className="block text-sm text-gray-400 mb-2">
-          Upload Resume (PDF, DOCX)
-        </label>
-        <input
-          type="file"
-          name="resume"
-          accept=".pdf,.doc,.docx"
-          className="
-          w-full
-          text-sm
-          text-gray-400
-          file:mr-4
-          file:py-2.5
-          file:px-4
-          file:rounded-xl
-          file:border-0
-          file:text-sm
-          file:font-semibold
-          file:bg-cyan-500/10
-          file:text-cyan-400
-          hover:file:bg-cyan-500/20
-          file:cursor-pointer
           "
         />
       </div>
